@@ -1,17 +1,29 @@
+import { useEffect } from "react";
 import DashboardItem from "./DashboardItem";
 import { Link } from "react-router-dom";
 import { useLoaderData } from "react-router-dom";
 import { useDispatch ,useSelector} from "react-redux";
 import { walletActions } from "./store/wallet-slice";
 import { redirect } from "react-router-dom";
+import { getWallets } from "../services/wallet";
 
 const Dashboard = ()=>{
     const dispatch = useDispatch();
-    const data = useLoaderData();
-    dispatch(walletActions.replaceWallet(data));
-
+    // const data = useLoaderData();
     const walletList = useSelector(state=> state.wallet.walletItems);
 
+    useEffect(
+        () => {
+            const helper = async () => {
+                const data = await getWallets();
+                console.log( data );
+                dispatch(walletActions.replaceWallet(data));
+            };
+
+            helper();
+        },
+        []
+    );
 
     return (
         <div className="projects">
@@ -81,7 +93,8 @@ export const loader = async ()=>{
 export async function action({ params, request }) {
     const id = params.id;
     console.log(id);
-    const response = await fetch('http://localhost:8080/wallet/' + id, {
+    debugger;
+    const response = await fetch('http://localhost:8080/wallet/' + request.action, {
       method: request.method
     });
   
