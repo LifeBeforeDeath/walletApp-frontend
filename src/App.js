@@ -26,8 +26,26 @@ const router = createBrowserRouter([
       {
         path:'dashboard',
         element:<Dashboard />,
+<<<<<<< HEAD
       },
     
+=======
+        // loader:walletLoader,
+        // action: deleteAction
+        // children:[
+        //   {
+        //     path:':id',
+        //     action:deleteAction
+        //   }
+        // ]
+      },
+    
+      // {
+      //     path:':id',
+      //     action:deleteAction,
+          
+      // },
+>>>>>>> 8a44964f913a9556414e29473e723d233b47227b
       {
         path:'createWallet',
         

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useSubmit } from "react-router-dom";
+<<<<<<< HEAD
 import { useDispatch } from "react-redux";
 import { walletActions } from "./store/wallet-slice";
 import { deleteWallet } from "./services/wallet";
@@ -9,6 +10,16 @@ const DashboardItem = (props)=>{
 
     const dispatch = useDispatch();
 
+=======
+import { deleteWallet } from '../services/wallet';
+import { useDispatch } from "react-redux";
+import { walletActions } from './store/wallet-slice';
+
+const DashboardItem = (props)=>{
+    const submit = useSubmit();
+    const dispatch = useDispatch();
+
+>>>>>>> 8a44964f913a9556414e29473e723d233b47227b
     async function startDeleteHandler() {
         const proceed = window.confirm('Are you sure?');
 
@@ -16,7 +27,10 @@ const DashboardItem = (props)=>{
             // submit(null, { method: 'delete', action: props.id });
             await deleteWallet( props.id )
             dispatch( walletActions.removeItemFromWallet( props.id ) );
+<<<<<<< HEAD
        
+=======
+>>>>>>> 8a44964f913a9556414e29473e723d233b47227b
         }
     }
 
@@ -44,12 +58,21 @@ const DashboardItem = (props)=>{
                                 <li className="list-group-item update text-info">
                                     <i className="fa fa-edit pr-1"> Update Account Info</i>
                                 </li>
+<<<<<<< HEAD
                             </Link>
+=======
+                            </a>
+                            {/* <Link to={`/${props.id}`} onClick={startDeleteHandler}> */}
+>>>>>>> 8a44964f913a9556414e29473e723d233b47227b
                             <span onClick={startDeleteHandler}>
                                 <li className="list-group-item delete text-danger">
                                     <i className="fa fa-minus-circle pr-1"> Delete Account</i>
                                 </li>
                             </span>
+<<<<<<< HEAD
+=======
+                            {/* </Link> */}
+>>>>>>> 8a44964f913a9556414e29473e723d233b47227b
                         </ul>
                     </div>
                 </div>

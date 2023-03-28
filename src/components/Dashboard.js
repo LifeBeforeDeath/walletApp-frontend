@@ -1,18 +1,27 @@
+import { useEffect } from "react";
 import DashboardItem from "./DashboardItem";
 import { Link } from "react-router-dom";
 // import { useLoaderData } from "react-router-dom";
 import { useDispatch ,useSelector} from "react-redux";
 import { walletActions } from "./store/wallet-slice";
+<<<<<<< HEAD
 // import { redirect } from "react-router-dom";
 import { useEffect } from "react";
 import { getWallets } from "./services/wallet";
 import { useState } from "react";
+=======
+import { redirect } from "react-router-dom";
+import { getWallets } from "../services/wallet";
+>>>>>>> 8a44964f913a9556414e29473e723d233b47227b
 
 const Dashboard = ()=>{
     const dispatch = useDispatch();
     // const data = useLoaderData();
+<<<<<<< HEAD
     const [curBalance,setCurBalance] = useState(0.00);
 
+=======
+>>>>>>> 8a44964f913a9556414e29473e723d233b47227b
     const walletList = useSelector(state=> state.wallet.walletItems);
     // console.log(walletList);
 
@@ -41,6 +50,18 @@ const Dashboard = ()=>{
 
     
 
+    useEffect(
+        () => {
+            const helper = async () => {
+                const data = await getWallets();
+                console.log( data );
+                dispatch(walletActions.replaceWallet(data));
+            };
+
+            helper();
+        },
+        []
+    );
 
     return (
         <div className="projects">
@@ -107,12 +128,22 @@ export default Dashboard;
 //     }
 // }
 
+<<<<<<< HEAD
 // export async function action({ params, request }) {
 //     const id = params.id;
 //     console.log(id);
 //     const response = await fetch('http://localhost:8080/wallet/' + id, {
 //       method: request.method
 //     });
+=======
+export async function action({ params, request }) {
+    const id = params.id;
+    console.log(id);
+    debugger;
+    const response = await fetch('http://localhost:8080/wallet/' + request.action, {
+      method: request.method
+    });
+>>>>>>> 8a44964f913a9556414e29473e723d233b47227b
   
 //     if (!response.ok) {
 //       throw new Error(response.statusText);
