@@ -1,14 +1,22 @@
 import { Link } from "react-router-dom";
 import { useSubmit } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { walletActions } from "./store/wallet-slice";
+import { deleteWallet } from "./services/wallet";
 
 const DashboardItem = (props)=>{
-    const submit = useSubmit();
+    // const submit = useSubmit();
 
-    function startDeleteHandler() {
+    const dispatch = useDispatch();
+
+    async function startDeleteHandler() {
         const proceed = window.confirm('Are you sure?');
 
         if (proceed) {
-            submit(null, { method: 'delete' });
+            // submit(null, { method: 'delete', action: props.id });
+            await deleteWallet( props.id )
+            dispatch( walletActions.removeItemFromWallet( props.id ) );
+       
         }
     }
 
@@ -27,21 +35,21 @@ const DashboardItem = (props)=>{
                     </div>
                     <div className="col-md-4 col-12 d-lg-block">
                         <ul className="list-group">
-                            <a href="transactions.html">
+                            <Link to={`/transaction/${props.id}`}>
                                 <li className="list-group-item board text-success">
                                     <i className="fa fa-flag-checkered pr-1"> View Transactions </i>
                                 </li>
-                            </a>
-                            <a href="walletForm.html">
+                            </Link>
+                            <Link to={`/updateWallet/${props.id}`}>
                                 <li className="list-group-item update text-info">
                                     <i className="fa fa-edit pr-1"> Update Account Info</i>
                                 </li>
-                            </a>
-                            <Link to={`/${props.id}`} onClick={startDeleteHandler}>
+                            </Link>
+                            <span onClick={startDeleteHandler}>
                                 <li className="list-group-item delete text-danger">
                                     <i className="fa fa-minus-circle pr-1"> Delete Account</i>
                                 </li>
-                            </Link>
+                            </span>
                         </ul>
                     </div>
                 </div>

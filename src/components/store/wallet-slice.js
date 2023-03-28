@@ -28,7 +28,10 @@ const walletSlice = createSlice({
         },
         errorReducer(state,action){
             state.error = action.payload
-        }
+        },
+        // updateToWallet(state,action){
+        //     state.updateWallet = action.payload;
+        // }
     }
 });
 

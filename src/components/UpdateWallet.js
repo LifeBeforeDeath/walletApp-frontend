@@ -1,28 +1,16 @@
+import { useSelector } from "react-redux";
+import { Form } from "react-router-dom";
+import { redirect } from "react-router-dom";
+import { useParams } from "react-router-dom";
+// import { useSelector } from "react-redux";
 
-import { Form, redirect } from "react-router-dom";
-import { useRef } from "react";
-import { createWallet } from "./services/wallet";
+const UpdateWallet = (props) => {
 
-const CreateWallet = () => {
-
-    // const name = useRef('');
-    // const accountNumber = useRef('');
-    // const description = useRef('');
-    // const priority = useRef();
-    // // const name = useRef('');
-
-    // const random = Math.random()*100000;
-
-    // const walletData = {
-    //     id:random,
-    //     name:name.current.value,
-    //     accountNumber:accountNumber.current.value,
-    //     description:description.current.value,
-    //     priority:priority.current.value
-    // }
-
-
-
+    const {id} = useParams();
+    console.log("id :- "+id);
+    const walletList = useSelector(state=> state.wallet.walletItems);
+    const walletObject = walletList.filter((item)=> item.id === id);
+    console.log(walletObject);
 
 
   return (
@@ -30,15 +18,16 @@ const CreateWallet = () => {
       <div className="container">
         <div className="row">
           <div className="col-md-8 m-auto">
-            <h5 className="display-4 text-center">Create Wallet</h5>
+            <h5 className="display-4 text-center">Update Wallet</h5>
             <hr />
-            <Form method="post">
+            <Form method="put">
               <div className="form-group">
                 <input
                   type="text"
                   className="form-control form-control-lg m-2"
                   placeholder="Account Name"
                   name="name"
+                  value={walletObject.name}
                 //   ref={name}
                 />
               </div>
@@ -74,7 +63,7 @@ const CreateWallet = () => {
               <input
                 type="submit"
                 className="btn btn-primary btn-block mt-4"
-                value="Create"
+                value="Update"
               />
             </Form>
           </div>
@@ -83,23 +72,23 @@ const CreateWallet = () => {
     </div>
   );
 };
-export default CreateWallet;
+export default UpdateWallet;
 
-export async function action({request}) {
+export async function updateAction({params,request}){
     const method = request.method;
     const data = await request.formData();
-
-    const random = Math.random()*100000;
+    const id = params.id;
+    // const random = Math.random()*100000;
 
     const walletData = {
-        id:random,
+        id:id,
         name:data.get('name'),
         accountNumber:data.get('accountNumber'),
         description:data.get('description'),
         priority:data.get('priority')
     }
 
-    let url = 'http://localhost:8080/wallet';
+    let url = `http://localhost:8080/wallet/${id}`;
 
     const response = await fetch(url,{
         method:method,
@@ -107,7 +96,7 @@ export async function action({request}) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(walletData),
-    });
+    })
 
     if(response.ok){
         alert('success');

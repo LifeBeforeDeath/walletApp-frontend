@@ -1,16 +1,45 @@
 import DashboardItem from "./DashboardItem";
 import { Link } from "react-router-dom";
-import { useLoaderData } from "react-router-dom";
+// import { useLoaderData } from "react-router-dom";
 import { useDispatch ,useSelector} from "react-redux";
 import { walletActions } from "./store/wallet-slice";
-import { redirect } from "react-router-dom";
+// import { redirect } from "react-router-dom";
+import { useEffect } from "react";
+import { getWallets } from "./services/wallet";
+import { useState } from "react";
 
 const Dashboard = ()=>{
     const dispatch = useDispatch();
-    const data = useLoaderData();
-    dispatch(walletActions.replaceWallet(data));
+    // const data = useLoaderData();
+    const [curBalance,setCurBalance] = useState(0.00);
 
     const walletList = useSelector(state=> state.wallet.walletItems);
+    // console.log(walletList);
+
+
+    useEffect(
+        () => {
+            const helper = async () => {
+                const data = await getWallets();
+                // console.log( data );
+                dispatch(walletActions.replaceWallet(data));
+            };
+
+            helper();
+
+            let total = 0;
+            // for(let wallet in walletList){
+            //     total += wallet.currentBalance;
+            // }
+            walletList.forEach(wallet => {
+                total += wallet.currentBalance;
+            });
+            setCurBalance(total);
+        },
+        [walletList,dispatch]
+    );
+
+    
 
 
     return (
@@ -34,7 +63,7 @@ const Dashboard = ()=>{
                         <div className="card text-center">
                             <div className="card-header bg-success text-white">
                                 <h4>Current Balance (Total)</h4>
-                                <h1>Rs. 27000</h1>
+                                <h1>Rs. {curBalance}</h1>
                             </div>
                         </div>
                         <hr />
@@ -69,27 +98,27 @@ const Dashboard = ()=>{
 
 export default Dashboard;
 
-export const loader = async ()=>{
-    const response = await fetch('http://localhost:8080/wallet');
-    if(!response.ok){
-        // throw new Error('something went wrong');
-    }else{
-        return response.json();
-    }
-}
+// export const loader = async ()=>{
+//     const response = await fetch('http://localhost:8080/wallet');
+//     if(!response.ok){
+//         // throw new Error('something went wrong');
+//     }else{
+//         return response.json();
+//     }
+// }
 
-export async function action({ params, request }) {
-    const id = params.id;
-    console.log(id);
-    const response = await fetch('http://localhost:8080/wallet/' + id, {
-      method: request.method
-    });
+// export async function action({ params, request }) {
+//     const id = params.id;
+//     console.log(id);
+//     const response = await fetch('http://localhost:8080/wallet/' + id, {
+//       method: request.method
+//     });
   
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-    // return redirect('/');
-  }
+//     if (!response.ok) {
+//       throw new Error(response.statusText);
+//     }
+//     // return redirect('/');
+//   }
 
 
   
