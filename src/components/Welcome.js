@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 const WelcomePage = ()=>{
     return (
         <div className="landing">
@@ -10,12 +11,12 @@ const WelcomePage = ()=>{
                                 Create your account to manage your daily expense and hisab kitab
                             </p>
                             <hr />
-                            <a href="register.html" className="btn btn-lg btn-primary m-2">
+                            <Link to="/signUp" className="btn btn-lg btn-primary m-2">
                                 Sign Up
-                    </a>
-                            <a href="login.html" className="btn btn-lg btn-secondary m-2">
+                            </Link>
+                            <Link to="/login" className="btn btn-lg btn-secondary m-2">
                                 Login
-                    </a>
+                            </Link>
                         </div>
                     </div>
                 </div>

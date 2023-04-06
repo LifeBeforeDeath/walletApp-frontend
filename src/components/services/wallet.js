@@ -1,5 +1,5 @@
-export async function getWallets() {
-    const response = await fetch('http://localhost:8080/wallet');
+export async function getWallets(userId) {
+    const response = await fetch('http://localhost:8080/wallet/'+userId);
     if(!response.ok){
         throw new Error(response.statusText);
     }else{
@@ -7,8 +7,17 @@ export async function getWallets() {
     }
 }
 
-export async function deleteWallet( id ) {
-    const response = await fetch('http://localhost:8080/wallet/' + id, {
+export async function getWalletById(userId,walletId) {
+    const response = await fetch('http://localhost:8080/wallet/'+userId+'/'+walletId);
+    if(!response.ok){
+        throw new Error(response.statusText);
+    }else{
+        return response.json();
+    }
+}
+
+export async function deleteWallet( userId,id ) {
+    const response = await fetch('http://localhost:8080/wallet/' + userId +'/'+id, {
       method: 'delete'
     });
   
@@ -19,8 +28,8 @@ export async function deleteWallet( id ) {
     return response;
 }
 
-export async function createWallet( walletData ){
-    let url = 'http://localhost:8080/wallet';
+export async function createWallet( userId,walletData ){
+    let url = 'http://localhost:8080/wallet/'+userId;
 
     const response = await fetch(url,{
         method:'post',
@@ -31,13 +40,15 @@ export async function createWallet( walletData ){
     });
 
     if(response.ok){
-        alert('success');
+       return response.json();
+    }else{
+        throw new Error(response.statusText);
     }
 
 }
 
-export async function updateWallet( id,walletData ){
-    let url = `http://localhost:8080/wallet/${id}`;
+export async function updateWallet(userId,id,walletData ){
+    let url = `http://localhost:8080/wallet/${userId}/${id}`;
 
     const response = await fetch(url,{
         method:'put',
@@ -48,5 +59,10 @@ export async function updateWallet( id,walletData ){
     })
 
 
-    return response.json();
+    if(response.ok){
+        return response.json();
+     }else{
+         throw new Error(response.statusText);
+     }
+ 
 }

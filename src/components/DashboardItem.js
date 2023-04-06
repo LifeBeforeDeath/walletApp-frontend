@@ -3,18 +3,22 @@ import { useSubmit } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { walletActions } from "./store/wallet-slice";
 import { deleteWallet } from "./services/wallet";
+import { useSelector } from "react-redux";
 
 const DashboardItem = (props)=>{
     // const submit = useSubmit();
 
     const dispatch = useDispatch();
 
+    const curUser = useSelector(state => state.user.userItem);
+    const userId = curUser.userId;
+
     async function startDeleteHandler() {
         const proceed = window.confirm('Are you sure?');
 
         if (proceed) {
             // submit(null, { method: 'delete', action: props.id });
-            await deleteWallet( props.id )
+            await deleteWallet(userId, props.id );
             dispatch( walletActions.removeItemFromWallet( props.id ) );
        
         }

@@ -14,6 +14,10 @@ const Dashboard = ()=>{
     // const data = useLoaderData();
     const [curBalance,setCurBalance] = useState(0.00);
 
+   
+    const curUser = useSelector(state => state.user.userItem);
+    const userId = curUser.userId;
+    const userBalance = curUser.balance;
     const walletList = useSelector(state=> state.wallet.walletItems);
     // console.log(walletList);
 
@@ -21,14 +25,14 @@ const Dashboard = ()=>{
     useEffect(
         () => {
             const helper = async () => {
-                const data = await getWallets();
+                const data = await getWallets(userId);
                 // console.log( data );
                 dispatch(walletActions.replaceWallet(data));
             };
 
             helper();
 
-            let total = 0;
+            let total = userBalance;
             // for(let wallet in walletList){
             //     total += wallet.currentBalance;
             // }
@@ -37,23 +41,23 @@ const Dashboard = ()=>{
             });
             setCurBalance(total);
         },
-        [walletList,dispatch]
+        [walletList,dispatch,userId,userBalance]
     );
 
     
 
-    useEffect(
-        () => {
-            const helper = async () => {
-                const data = await getWallets();
-                console.log( data );
-                dispatch(walletActions.replaceWallet(data));
-            };
+    // useEffect(
+    //     () => {
+    //         const helper = async () => {
+    //             const data = await getWallets();
+    //             console.log( data );
+    //             dispatch(walletActions.replaceWallet(data));
+    //         };
 
-            helper();
-        },
-        []
-    );
+    //         helper();
+    //     },
+    //     []
+    // );
 
     return (
         <div className="projects">
@@ -84,6 +88,8 @@ const Dashboard = ()=>{
                             //<!-- Project Item Component -->
                         }
                         {
+                            walletList.length === 0 ? 
+                            <p className="text-danger">No wallets to display,please Add it!</p> :
                             walletList.map((item)=>(
                                 <DashboardItem 
                                     key={item.id}

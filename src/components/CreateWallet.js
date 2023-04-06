@@ -1,25 +1,44 @@
 
-import { Form, redirect } from "react-router-dom";
-import { useRef } from "react";
+import { Form, redirect, useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
 import { createWallet } from "./services/wallet";
+import { useDispatch, useSelector } from "react-redux";
+import { walletActions } from "./store/wallet-slice";
 
 const CreateWallet = () => {
 
-    // const name = useRef('');
-    // const accountNumber = useRef('');
-    // const description = useRef('');
-    // const priority = useRef();
-    // // const name = useRef('');
+    const navigate = useNavigate();
 
-    // const random = Math.random()*100000;
+    const dispatch = useDispatch();
 
-    // const walletData = {
-    //     id:random,
-    //     name:name.current.value,
-    //     accountNumber:accountNumber.current.value,
-    //     description:description.current.value,
-    //     priority:priority.current.value
-    // }
+    const userObj = useSelector(state => state.user.userItem);
+    const userId = userObj.userId;
+
+    const name = useRef('');
+    const accountNumber = useRef('');
+    const description = useRef('');
+    const priority = useRef();
+
+    const onSubmitHandler = async (event) =>{
+        event.preventDefault();
+
+        const walletData = {
+            name:name.current.value,
+            accountNumber:accountNumber.current.value,
+            description:description.current.value,
+            priority:priority.current.value
+        }
+        try{
+            const response =  await createWallet(userId,walletData);
+            dispatch(walletActions.addItemToWallet(response));
+            navigate("/dashboard");
+        } catch (err){
+            alert(err.message);
+        }
+       
+
+    }
+
 
 
 
@@ -32,14 +51,14 @@ const CreateWallet = () => {
           <div className="col-md-8 m-auto">
             <h5 className="display-4 text-center">Create Wallet</h5>
             <hr />
-            <Form method="post">
+            <Form method="post" onSubmit={onSubmitHandler}>
               <div className="form-group">
                 <input
                   type="text"
                   className="form-control form-control-lg m-2"
                   placeholder="Account Name"
                   name="name"
-                //   ref={name}
+                  ref={name}
                 />
               </div>
               <div className="form-group">
@@ -48,7 +67,7 @@ const CreateWallet = () => {
                   className="form-control form-control-lg m-2"
                   placeholder="Account No"
                   name="accountNumber"
-                //   ref={accountNumber}
+                  ref={accountNumber}
                 />
               </div>
               <div className="form-group">
@@ -56,14 +75,14 @@ const CreateWallet = () => {
                   className="form-control form-control-lg m-2"
                   placeholder="Description"
                   name="description"
-                //   ref={description}
+                  ref={description}
                 ></textarea>
               </div>
               <div className="form-group">
                 <select
                   className="form-control form-control-lg m-2"
                   name="priority"
-                //   ref={priority}
+                  ref={priority}
                 >
                   <option value={3}>Display Priority</option>
                   <option value={1}>High</option>
@@ -85,33 +104,33 @@ const CreateWallet = () => {
 };
 export default CreateWallet;
 
-export async function action({request}) {
-    const method = request.method;
-    const data = await request.formData();
+// export async function action({request}) {
+//     const method = request.method;
+//     const data = await request.formData();
 
-    const random = Math.random()*100000;
+//     const random = Math.random()*100000;
 
-    const walletData = {
-        id:random,
-        name:data.get('name'),
-        accountNumber:data.get('accountNumber'),
-        description:data.get('description'),
-        priority:data.get('priority')
-    }
+//     const walletData = {
+//         id:random,
+//         name:data.get('name'),
+//         accountNumber:data.get('accountNumber'),
+//         description:data.get('description'),
+//         priority:data.get('priority')
+//     }
 
-    let url = 'http://localhost:8080/wallet';
+//     let url = 'http://localhost:8080/wallet';
 
-    const response = await fetch(url,{
-        method:method,
-        headers:{
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(walletData),
-    });
+//     const response = await fetch(url,{
+//         method:method,
+//         headers:{
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(walletData),
+//     });
 
-    if(response.ok){
-        alert('success');
-    }
+//     if(response.ok){
+//         alert('success');
+//     }
 
-    return redirect('/dashboard');
-}
+//     return redirect('/dashboard');
+// }

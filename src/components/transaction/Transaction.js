@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 
 const Transaction = () => {
-    const walletList = useSelector(state=> state.wallet.walletItems);
+    
 
     const [balance ,setBalance] = useState();
     // const [type,setType] = useState();
@@ -20,14 +20,20 @@ const Transaction = () => {
     }
     const dispatch = useDispatch();
 
+    const walletList = useSelector(state=> state.wallet.walletItems);
+    const wallet =walletList.find((item) => item.id == id);
 
-    console.log(walletList);
+    const curUser = useSelector(state => state.user.userItem);
+    const userId = curUser.userId;
+
+
+    console.log(wallet);
 
 
     useEffect(
         () => {
             const helper = async () => {
-                const data = await getTransaction(id);
+                const data = await getTransaction(userId,id);
                 // console.log( data );
                 dispatch(transactionActions.replaceTransaction(data));
             };
@@ -35,12 +41,12 @@ const Transaction = () => {
             helper();
 
             
-            const wallet =walletList.filter((item) => item.id === id);
+            
             // console.log("balance:-"+walletList);
-            setBalance(wallet.currentBalance);
+            // setBalance(wallet.currentBalance);
            
         },
-        [walletList,dispatch,id]
+        [walletList,dispatch,id,userId]
     );
 
     const transactionList = useSelector(state=>state.transaction.TransactionItems);
@@ -49,9 +55,8 @@ const Transaction = () => {
         const proceed = window.confirm('Are you sure?');
 
         if (proceed) {
-            // submit(null, { method: 'delete', action: props.id });
-            await deleteTransaction( id, trxId);
-            // dispatch( walletActions.removeItemFromWallet( props.id ) );
+            await deleteTransaction( userId,id, trxId);
+            dispatch(transactionActions.removeItemFromTransaction(trxId));
        
         }
     }
@@ -69,7 +74,7 @@ const Transaction = () => {
       <div className="card text-center">
         <div className="card-header bg-success text-white">
           <h4>UBL Account Balance</h4>
-          <h1>Rs. {balance}</h1>
+          <h1>Rs. {wallet.currentBalance}</h1>
         </div>
       </div>
       <hr />
@@ -84,26 +89,26 @@ const Transaction = () => {
           </tr>
         </thead>
         <tbody>
-
-            {
+          { transactionList.length === 0 ? <p className="text-primary text-center">No transactions to display</p> : (
+               
                 transactionList.map((trx) => (
                     <tr className="table-success" key={trx.id}>
                         <td>{trx.transactionDate}</td>
-                        {trx.type === 1 ?  <td>Income</td> : <td>Expanse</td> }
+                        {trx.type === 1 ?  <td>Income</td> : trx.type === 2 ? <td>Expanse</td> :  <td>Transfer</td>}
                         {
                             trx.type === 1 ? (<td className="text-success">+ {trx.amount}</td>) : <td className="text-danger">- {trx.amount}</td> 
                         }
                         <td>
-                            <a className="text-info" href="updatetransactionForm.html">
-                                <i className="fas fa-edit fa-2x"></i>
-                            </a>
                             <span className="text-danger" onClick={()=>deleteHandler(trx.id)}>
                                 <i className="fas fa-trash fa-2x"></i>
                             </span>
                         </td>
                     </tr>
                 ))
-            }
+            
+          )}
+
+           
         </tbody>
       </table>
     </div>

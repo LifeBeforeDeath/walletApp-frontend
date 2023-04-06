@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const transactionSlice = createSlice({
-    name:'wallet',
-    initialState:{TransactionItems:[]},
+const userSlice = createSlice({
+    name:'user',
+    initialState:{userItem:{}},
     reducers:{
-        replaceTransaction(state,action){
-            state.TransactionItems = action.payload;
+        replaceUsers(state,action){
+            state.userItem = action.payload;
         },
         // addItemToWallet(state,action){
         //     const newItem = action.payload;
@@ -21,19 +21,20 @@ const transactionSlice = createSlice({
         //         })
         //     }
         // },
-        removeItemFromTransaction(state,action){
-            const id = action.payload;
-            state.TransactionItems = state.TransactionItems.filter((item)=> item.id !== id);
+        // removeItemFromWallet(state,action){
+        //     const id = action.payload;
+        //     state.walletItems = state.walletItems.filter((item)=> item.id !== id);
 
-        },
+        // },
         // errorReducer(state,action){
         //     state.error = action.payload
         // },
         // updateToWallet(state,action){
-        //     state.updateWallet = action.payload;
+        //     const id = action.payload.id;
+        //     state.walletItems = state.walletItems.map((item)=> item.id !== id ? item : action.payload);
         // }
     }
 });
 
-export const transactionActions = transactionSlice.actions;
-export default transactionSlice;
+export const userActions = userSlice.actions;
+export default userSlice;

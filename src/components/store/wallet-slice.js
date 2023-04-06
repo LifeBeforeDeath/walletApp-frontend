@@ -29,9 +29,10 @@ const walletSlice = createSlice({
         errorReducer(state,action){
             state.error = action.payload
         },
-        // updateToWallet(state,action){
-        //     state.updateWallet = action.payload;
-        // }
+        updateToWallet(state,action){
+            const id = action.payload.id;
+            state.walletItems = state.walletItems.map((item)=> item.id !== id ? item : action.payload);
+        }
     }
 });
 
